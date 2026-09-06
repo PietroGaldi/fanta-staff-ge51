@@ -61,6 +61,8 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('btn-vista-persona').addEventListener('click', () => impostaVista('persona'));
   document.getElementById('btn-vista-unita').addEventListener('click', () => impostaVista('unita'));
 
+  document.getElementById('btn-vai-risultati').addEventListener('click', avviaModalitaRisultati);
+  
   const urlParams = new URLSearchParams(window.location.search);
   if (urlParams.get('view') === 'risultati') {
     avviaModalitaRisultati();
