@@ -264,6 +264,7 @@ async function scaricaEAggiorna() {
       const datiPersona = datiAggregati[personaId];
       
       if (datiPersona && datiPersona.voti) {
+        // --- 1. Aggiornamento Torte e Legende ---
         const labels = Object.keys(datiPersona.voti);
         const data = Object.values(datiPersona.voti);
         const colors = labels.map(l => coloriUnita[l] || "#000000");
@@ -295,6 +296,7 @@ async function scaricaEAggiorna() {
           contenitoreDesiderio.innerHTML = `Desiderio: <span class="badge-desiderio" style="background-color: ${lightBg}; border: 1px solid ${baseColor};">${datiPersona.autoVoto}</span>`;
         }
 
+        // --- 2. Preparazione dati per la Vista Unità ---
         let maxVotes = 0;
         for (let u in datiPersona.voti) {
           if (datiPersona.voti[u] > maxVotes) maxVotes = datiPersona.voti[u];
@@ -307,9 +309,20 @@ async function scaricaEAggiorna() {
         
         const isTie = topUnits.length > 1;
 
+        // Creazione HTML dei badge per le micro-card
+        const agesciBadge = persona.formAgesci && persona.formAgesci.trim() !== "" 
+          ? `<span class="badge badge-agesci" style="font-size: 9px; padding: 2px 6px;">${persona.formAgesci}</span>` : "";
+        const aicBadge = persona.formAic && persona.formAic.trim() !== "" 
+          ? `<span class="badge badge-aic" style="font-size: 9px; padding: 2px 6px;">${persona.formAic}</span>` : "";
+        const badgesHtml = `<div style="display:flex; gap:4px; margin-left: 8px;">${agesciBadge}${aicBadge}</div>`;
+
         topUnits.forEach(u => {
           if(gruppiUnita[u]) {
-            gruppiUnita[u].push({ nome: `${persona.nome} ${persona.cognome}`, isTie: isTie });
+            gruppiUnita[u].push({ 
+              nome: `${persona.nome} ${persona.cognome}`, 
+              isTie: isTie,
+              badges: (agesciBadge || aicBadge) ? badgesHtml : ""
+            });
           }
         });
 
@@ -319,6 +332,7 @@ async function scaricaEAggiorna() {
       }
     });
 
+    // --- 3. Rendering Griglia Unità ---
     let htmlUnita = "";
     unitaOptions.forEach(u => {
       const color = coloriUnita[u] || "#333";
@@ -329,14 +343,21 @@ async function scaricaEAggiorna() {
         htmlUnita += `<div class="micro-card" style="color:#94a3b8; font-style:italic;">Nessun capo maggioritario</div>`;
       } else {
         gruppiUnita[u].forEach(p => {
-          let badge = p.isTie ? `<span class="tie-indicator">⚖️ Parità</span>` : '';
-          htmlUnita += `<div class="micro-card">${p.nome} ${badge}</div>`;
+          let tieBadge = p.isTie ? `<span class="tie-indicator">⚖️ Parità</span>` : '';
+          htmlUnita += `
+            <div class="micro-card">
+              <div style="display: flex; align-items: center;">
+                ${p.nome} ${p.badges}
+              </div>
+              ${tieBadge}
+            </div>`;
         });
       }
       htmlUnita += `</div>`;
     });
     document.getElementById("griglia-unita").innerHTML = htmlUnita;
 
+    // --- 4. Rendering Lista Desideri ---
     let htmlDesideri = desideriRispettati.length > 0
       ? desideriRispettati.map(d => `<li>${d}</li>`).join('')
       : `<li>Nessun desiderio coincidente con la maggioranza.</li>`;
