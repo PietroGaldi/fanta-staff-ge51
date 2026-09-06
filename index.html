@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fanta-staff 2026/2027</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+
+  <h1>Fanta-staff 2026/2027</h1>
+
+  <!-- VISTA 1: IL FORM -->
+  <div id="sezione-voto">
+    <div class="card id-card">
+      <label for="chi-sei"><strong>Prima di iniziare, chi sei?</strong></label>
+      <select id="chi-sei">
+        <option value="" disabled selected>Seleziona il tuo nome...</option>
+        <!-- Popolato dal JS -->
+      </select>
+    </div>
+
+    <div id="lista-coca"></div>
+    <button id="btn-invia">Invia il tuo Fanta-staff</button>
+  </div>
+
+  <!-- VISTA 2: I RISULTATI -->
+  <div id="sezione-risultati" style="display: none;">
+    <div class="toggle-container">
+      <button id="btn-vista-persona" class="toggle-btn active">👤 Per Persona</button>
+      <button id="btn-vista-unita" class="toggle-btn">🏕️ Per Unità</button>
+    </div>
+
+    <!-- Contenitore 1: Torte -->
+    <div id="vista-persona">
+      <div id="lista-risultati"></div>
+    </div>
+
+    <!-- Contenitore 2: Griglia Staffette e Desideri -->
+    <div id="vista-unita" style="display: none;">
+      <div id="griglia-unita"></div>
+      
+      <div class="card" style="border-left: 5px solid var(--secondary);">
+        <h3 style="margin-top:0; margin-bottom: 12px; color:var(--secondary);">✨ Desideri Rispettati</h3>
+        <p style="font-size: 13px; color: var(--text-muted); margin-top: 0;">Capi la cui maggioranza coincide con l'auto-voto:</p>
+        <ul id="lista-desideri" style="padding-left: 20px; margin-bottom:0; font-size:14px; color:var(--text-main); line-height: 1.6;">
+          <li>In attesa di dati...</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
